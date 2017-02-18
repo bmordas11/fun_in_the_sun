@@ -17,15 +17,33 @@ defmodule FunInTheSun.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    resources "/users", UserController
-    resources "/posts", PostController, only: [:index, :show]
+    resources "/users", UserController do
+      resources "/posts", PostController, only: [:index, :show]
+    end
+
+    get "/images", ImageController, :index
+
     resources "/comments", CommentController, except: [:delete]
+    resources "/reviews", ReviewController
     get "/hello", HelloController, :index
     get "/hello/:messenger", HelloController, :show
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", FunInTheSun do
-  #   pipe_through :api
-  # end
+  scope "/admin", FunInTheSun.Admin, as: :admin do
+    pipe_through :browser
+
+    resources "/images",  ImageController
+    resources "/reviews", ReviewController
+    resources "/users",   UserController
+  end
+
+  scope "/api", FunInTheSun.Api, as: :api do
+    pipe_through :api
+
+    scope "/v1", V1, as: :v1 do
+      resources "/images", ImageController
+      resources "/reviews", ReviewController
+      resources "/users", UserController
+    end
+  end
 end
