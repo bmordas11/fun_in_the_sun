@@ -9,22 +9,14 @@ defmodule FunInTheSun.Router do
     plug :put_secure_browser_headers
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
-  end
-
   scope "/", FunInTheSun do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    resources "/users", UserController do
-      resources "/posts", PostController, only: [:index, :show]
-    end
+    get "/test", PageController, :test
 
     get "/images", ImageController, :index
 
-    resources "/comments", CommentController, except: [:delete]
-    resources "/reviews", ReviewController
     get "/hello", HelloController, :index
     get "/hello/:messenger", HelloController, :show
   end
@@ -35,15 +27,5 @@ defmodule FunInTheSun.Router do
     resources "/images",  ImageController
     resources "/reviews", ReviewController
     resources "/users",   UserController
-  end
-
-  scope "/api", FunInTheSun.Api, as: :api do
-    pipe_through :api
-
-    scope "/v1", V1, as: :v1 do
-      resources "/images", ImageController
-      resources "/reviews", ReviewController
-      resources "/users", UserController
-    end
   end
 end

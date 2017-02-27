@@ -2,7 +2,7 @@ defmodule FunInTheSun.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", FunInTheSun.RoomChannel
+  channel "room:*", FunInTheSun.RoomChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
